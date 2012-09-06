@@ -1,8 +1,3 @@
-
-/**
- * Module dependencies.
- */
-
 var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
@@ -35,15 +30,16 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-mongoose.connect('mongodb://localhost/timesheet-development'); //default connect to localhost, 27017
+var db = mongoose.createConnection('localhost', 'test');
 
 app.get('/', routes.index);
 
-app.get('/timesheets', TimesheetsController.list);
+app.get('/timesheets', TimesheetsController.add);
 app.get('/users', UsersController.list)
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 
+module.exports = db;
 

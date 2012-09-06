@@ -23,15 +23,27 @@ mongoose.model('Timesheet', Timesheet);
 
 TimesheetsModel = {
 	listTimesheetsByUser : function(callback){
-
-    mongoose.connection.once('open', function() {
-      var ts = new Timesheet({});
-      ts.save();
-      console.log('saved a timesheet');
-      callback();
-    });
+    console.log('listing timesheets');
+    callback();
     
-	}
+	},
+
+  newTimesheet : function(callback){
+
+    console.log('adding new timesheet');
+
+    var ts = new Timesheet({ date: Date.now() });
+    
+    ts.save(function (err) {
+        if (err) // ...
+        res.end('made timesheet.');
+        callback();
+    });
+
+
+  }
+
+
 };
 
 module.exports = TimesheetsModel
