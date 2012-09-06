@@ -1,0 +1,46 @@
+script(src="javascripts/timesheet.js")
+.container
+  h1 Your timesheets
+
+  - if(timesheets.length)
+    ul
+      - timesheets.forEach(function(ts){
+      li
+        a(href="/timeshets/"+ts.id)=  ts.date
+        - ts.lines.forEach(function(line){
+          ul
+            li
+              span
+                =line.duration
+              span
+                =line.category
+              span
+                =line.subcategory
+              span
+                =line.details
+        - })
+      - })
+  - else
+    p You don't have any timesheets.
+
+  form#timesheet(method="POST", action="/timesheets")
+    label date for timesheet
+    input(type="date", name='date',class='date')
+    br
+    ol#timesheet-list
+      li.timesheet-line
+        input(type="number", class="hours", name="hours", min="0",value="0",step=".25")
+        select.category
+          option(value="Development") Development
+          option(value="Design") Design
+          option(value="Creative") Creative
+          option(value="User Experience") User Experince
+          option(value="Strategy") Strategy
+        select.subcategory
+          option(value="Front End") Front End
+          option(value="Backend") Back End
+        input(type="text", class="details", name="details")
+        a.remove-item(href="#") Remove
+
+    input(type="submit")
+  a#addItem(href="#") Add a new line item

@@ -1,25 +1,28 @@
 var mongoose = require('mongoose')
 	, Schema = mongoose.Schema
-  , ObjectId = Schema.ObjectId
-  , Timesheet;
+  , ObjectId = Schema.ObjectId;
 
-Timesheet = new Schema({
-    'date': Date,
-    'lines': [ {any: Schema.Types.Mixed} ],
-    'user_id': ObjectId
-  });
+var db = mongoose.createConnection('localhost', 'timesheet-test');
 
-  Timesheet.virtual('id')
-    .get(function() {
-      return this._id.toHexString();
-    });
+var TimesheetSchema = new Schema({
+  'date': Date,
+  'lines': [ {any: Schema.Types.Mixed} ],
+  'user_id': ObjectId
+});
 
-  Timesheet.pre('save', function(next) {
-    this.keywords = extractKeywords(this.data);
-    next();
-  }); 
+// Timesheet.virtual('id')
+//   .get(function() {
+//     return this._id.toHexString();
+//   });
 
-mongoose.model('Timesheet', Timesheet);
+// Timesheet.pre('save', function(next) {
+//   this.keywords = extractKeywords(this.data);
+//   next();
+// }); 
+
+var Timesheet = db.model('Timesheet', TimesheetSchema)
+
+//mongoose.model('Timesheet', Timesheet);
 
 TimesheetsModel = {
 	listTimesheetsByUser : function(callback){
