@@ -1,14 +1,17 @@
 var mongoose = require('mongoose')
-	, Schema = mongoose.Schema
+  , Schema = mongoose.Schema
   , ObjectId = Schema.ObjectId;
 
-var db = mongoose.createConnection('localhost', 'timesheet-test');
+var db = mongoose.createConnection('localhost', 'timetracker');
 
-var TimesheetSchema = new Schema({
+var TimesheetSchema = mongoose.Schema({
   'date': Date,
   'lines': [ {any: Schema.Types.Mixed} ],
   'user_id': ObjectId
 });
+
+var Timesheet = db.model('Timesheet', TimesheetSchema)
+
 
 // Timesheet.virtual('id')
 //   .get(function() {
@@ -20,9 +23,8 @@ var TimesheetSchema = new Schema({
 //   next();
 // }); 
 
-var Timesheet = db.model('Timesheet', TimesheetSchema)
 
-//mongoose.model('Timesheet', Timesheet);
+mongoose.model('Timesheet', Timesheet);
 
 TimesheetsModel = {
 	listTimesheetsByUser : function(callback){
@@ -31,18 +33,23 @@ TimesheetsModel = {
     
 	},
 
-  newTimesheet : function(callback){
+  newTimesheet : function(user,data,callback){
 
-    console.log('adding new timesheet');
+    var date = data.date;
+    var lines = data.lines;
+    var u = user;
 
-    var ts = new Timesheet({ date: Date.now() });
+    console.log(lines);
+
+    var ts = new Timesheet({ "date": Date.now(),"lines":lines, "user_id":u });
     
     ts.save(function (err) {
-        if (err) // ...
-        res.end('made timesheet.');
+        if (err) callback(err);
+        console.log('adding new timesheet');
         callback();
     });
-
+    
+    
 
   }
 

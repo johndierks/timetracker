@@ -10,7 +10,6 @@ var app = express();
 var TimesheetsController = require(__dirname + '/controllers/timesheets');
 var UsersController = require(__dirname + '/controllers/users');
 
-
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
@@ -30,16 +29,14 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-var db = mongoose.createConnection('localhost', 'test');
-
 app.get('/', routes.index);
 
-app.get('/timesheets', TimesheetsController.add);
+app.get('/timesheets', TimesheetsController.list);
+app.post('/timesheets', TimesheetsController.add);
 app.get('/users', UsersController.list)
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 
-module.exports = db;
 
